@@ -11,8 +11,6 @@ function onDeviceReady() {
     const btnTask = $('#btnTask').click(function(){addTask()})
     const btnRemoveList = $('#btnRemoveList').click(function(){removeList()})
 
-    removeItems = []
-
     getList()
 
 }
@@ -25,7 +23,7 @@ function getList() {
 
             processItem(item)
             
-        });
+        })
 
         updateList()
 
@@ -45,9 +43,9 @@ function addTask() {
 
             processItem(inputTask.value)
 
-            saveList()
-
             updateList()
+
+            saveList()
 
         } else {
 
@@ -66,23 +64,37 @@ function addTask() {
 
 }
 
-function removeTask() {
+function updateList() {
 
-    alert('Remove Task Clicked')
-    
+    $('.btnRemoveItem').click(function(){
+
+        var taskName = $(this).parent().text().substring(0, $(this).parent().text().length-1)
+
+        $(this).parent().remove()
+
+        for (var i in taskItems) {
+
+            if (taskItems[i] == taskName) {
+
+                taskItems.splice(i, 1)
+
+                break
+
+            }
+
+        }
+
+        saveList()
+
+    })
+
+    $('#taskList').listview().listview('refresh')
+
 }
 
 function saveList() {
 
     localStorage.setItem('taskList', JSON.stringify({'item':taskItems}))
-
-}
-
-function updateList() {
-
-    $('.btnRemoveItem').click(function(){removeTask()})
-
-    $('#taskList').listview().listview('refresh');
 
 }
 
