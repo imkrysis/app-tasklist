@@ -11,46 +11,23 @@ function onDeviceReady() {
     const btnTask = $('#btnTask').click(function(){addTask()})
     const btnRemoveList = $('#btnRemoveList').click(function(){removeList()})
 
+    removeItems = []
+
     getList()
-
-}
-
-function addTask() {
-
-    if (inputTask.value != "") {
-
-        if (checkItem(inputTask.value)) {
-
-            processItem(inputTask.value)
-
-            saveList()
-
-        } else {
-
-            alert("That task is already introduced")
-
-        }
-
-        inputTask.value = ""
-        
-
-    } else {
-
-        alert("You must type something...")
-
-    }    
 
 }
 
 function getList() {
 
-    if (localStorage.getItem("taskList") != null) {
+    if (localStorage.getItem('taskList') != null) {
 
-        JSON.parse(localStorage.getItem("taskList")).item.forEach(item => {
+        JSON.parse(localStorage.getItem('taskList')).item.forEach(item => {
 
             processItem(item)
             
         });
+
+        updateList()
 
     } else {
 
@@ -60,19 +37,72 @@ function getList() {
 
 }
 
+function addTask() {
+
+    if (inputTask.value != '') {
+
+        if (checkItem(inputTask.value)) {
+
+            processItem(inputTask.value)
+
+            saveList()
+
+            updateList()
+
+        } else {
+
+            alert('That task is already introduced')
+
+        }
+
+        inputTask.value = ''
+        
+
+    } else {
+
+        alert('You must type something...')
+
+    }    
+
+}
+
+function removeTask() {
+
+    alert('Remove Task Clicked')
+    
+}
+
 function saveList() {
 
-    localStorage.setItem("taskList", JSON.stringify({"item":taskItems}))
+    localStorage.setItem('taskList', JSON.stringify({'item':taskItems}))
+
+}
+
+function updateList() {
+
+    $('.btnRemoveItem').click(function(){removeTask()})
+
+    $('#taskList').listview().listview('refresh');
 
 }
 
 function removeList() {
 
-    localStorage.removeItem("taskList")
+    if (taskItems.length > 0) {
 
-    taskItems = []
+        localStorage.removeItem('taskList')
 
-    $('#taskList').empty()
+        taskItems = []
+    
+        $('#taskList').empty()
+    
+        alert('The list has been removed')
+
+    } else {
+
+        alert('The list doesnt have any item')
+
+    }    
 
 }
 
@@ -80,9 +110,7 @@ function processItem(item) {
 
     taskItems.push(item)
 
-    $('#taskList').append('<li>' + item + '</li>')
-
-    
+    $('#taskList').append('<li>' + item + '<button class="btnRemoveItem">X</button</li>')
 
 }
 
