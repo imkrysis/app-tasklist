@@ -72,7 +72,7 @@ function removeList() {
 
     taskItems = []
 
-    taskList
+    taskList.innerHTML = "";
 
 }
 
