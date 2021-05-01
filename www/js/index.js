@@ -6,10 +6,10 @@ function onDeviceReady() {
 
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version)
 
-    const taskList = document.getElementById('taskList')
-    const inputTask = document.getElementById('inputTask')
-    const btnTask = document.getElementById('btnTask').onclick = addTask
-    const btnRemoveList = document.getElementById('btnRemoveList').onclick = removeList
+    const taskList = $('#taskList')
+    const inputTask = $('#inputTask')
+    const btnTask = $('#btnTask').click(function(){addTask()})
+    const btnRemoveList = $('#btnRemoveList').click(function(){removeList()})
 
     getList()
 
@@ -72,7 +72,7 @@ function removeList() {
 
     taskItems = []
 
-    taskList.innerHTML = "";
+    $('#taskList').empty()
 
 }
 
@@ -80,11 +80,9 @@ function processItem(item) {
 
     taskItems.push(item)
 
-    node = document.createElement('li')
+    $('#taskList').append('<li>' + item + '</li>')
 
-    node.appendChild(document.createTextNode(item))
-
-    taskList.appendChild(node)
+    
 
 }
 
