@@ -1,29 +1,105 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+document.addEventListener('deviceready', onDeviceReady, false)
 
-// Wait for the deviceready event before using any of Cordova's device APIs.
-// See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
-document.addEventListener('deviceready', onDeviceReady, false);
+taskItems = []
 
 function onDeviceReady() {
-    // Cordova is now initialized. Have fun!
 
-    console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    document.getElementById('deviceready').classList.add('ready');
+    console.log('Running cordova-' + cordova.platformId + '@' + cordova.version)
+
+    const taskList = document.getElementById('taskList')
+    const inputTask = document.getElementById('inputTask')
+    const btnTask = document.getElementById('btnTask').onclick = addTask
+    const btnRemoveList = document.getElementById('btnRemoveList').onclick = removeList
+
+    getList()
+
+}
+
+function addTask() {
+
+    if (inputTask.value != "") {
+
+        if (checkItem(inputTask.value)) {
+
+            processItem(inputTask.value)
+
+            saveList()
+
+        } else {
+
+            alert("That task is already introduced")
+
+        }
+
+        inputTask.value = ""
+        
+
+    } else {
+
+        alert("You must type something...")
+
+    }    
+
+}
+
+function getList() {
+
+    if (localStorage.getItem("taskList") != null) {
+
+        JSON.parse(localStorage.getItem("taskList")).item.forEach(item => {
+
+            processItem(item)
+            
+        });
+
+    } else {
+
+        alert('There isnt any task-list locally found')
+
+    }
+
+}
+
+function saveList() {
+
+    localStorage.setItem("taskList", JSON.stringify({"item":taskItems}))
+
+}
+
+function removeList() {
+
+    localStorage.removeItem("taskList")
+
+    taskItems = []
+
+    taskList
+
+}
+
+function processItem(item) {
+
+    taskItems.push(item)
+
+    node = document.createElement('li')
+
+    node.appendChild(document.createTextNode(item))
+
+    taskList.appendChild(node)
+
+}
+
+function checkItem(item) {
+
+    for (var i in taskItems) {
+
+        if (taskItems[i] == item) {
+
+            return false
+
+        }
+
+    }
+
+    return true
+
 }
